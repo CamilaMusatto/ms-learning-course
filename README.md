@@ -18,3 +18,10 @@
 <img src="https://cdn.changelog.com/uploads/icons/topics/12R/icon_small.jpg" width="48"> 
 </div>
 
+## Funcionalidades do Projeto
+
+<p> 💻 Criação de cursos </p>
+<p> 💻 Pesquisa de Cursos exixtentes no Banco de Dados</p>
+
+
+
