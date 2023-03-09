@@ -2,6 +2,8 @@ package br.com.cmarchi.controllers;
 
 import br.com.cmarchi.domain.Course;
 import br.com.cmarchi.exceptions.InvalidParameterException;
+import br.com.cmarchi.model.request.CourseRequestDto;
+import br.com.cmarchi.model.response.CourseResponseDto;
 import br.com.cmarchi.services.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,7 +40,7 @@ public class CourseController {
     })
     @GetMapping(value = "/courses", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Course>> searchCourses(@Parameter(description = "id of course to be searched")
-                                                          @RequestParam(value = "courseId", required = false,
+                                                          @RequestParam(value = "courseId",
                                                                   defaultValue = "00000000-0000-0000-0000-000000000000") UUID courseId){
 
         return ResponseEntity.ok(service.searchCourse(courseId));
@@ -49,16 +51,15 @@ public class CourseController {
             @ApiResponse(description = "Course created", responseCode = "201",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = UUID.class))
+                            schema = @Schema(implementation = CourseResponseDto.class))
             ),
             @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
             @ApiResponse(description = "Invalid Parameter" , responseCode = "500", content = @Content)
 
     })
     @PostMapping(value = "/course", consumes = MediaType.APPLICATION_JSON_VALUE)
-
-    public ResponseEntity<UUID> createCoursesResult(@RequestBody Course course){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.createCourseResult(course.getCourseName()).getCourseId());
+    public ResponseEntity<CourseResponseDto> createCoursesResult(@RequestBody CourseRequestDto requestDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.createCourseResult(requestDto));
     }
 
 

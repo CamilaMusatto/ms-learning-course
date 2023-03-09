@@ -2,6 +2,8 @@ package br.com.cmarchi.services;
 
 import br.com.cmarchi.domain.Course;
 import br.com.cmarchi.exceptions.InvalidParameterException;
+import br.com.cmarchi.model.request.CourseRequestDto;
+import br.com.cmarchi.model.response.CourseResponseDto;
 import br.com.cmarchi.repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,11 @@ public class CourseService {
     CourseRepository repository;
 
 
-    public Course createCourseResult(String courseName){
+    public CourseResponseDto createCourseResult(CourseRequestDto requestDto){
 
-        if (isValid(courseName)) {
-            Course course = new Course(courseName);
-            return repository.save(course);
+        if (isValid(requestDto)) {
+            Course course = repository.save(new Course(requestDto.getCourseName()));
+            return new CourseResponseDto(course.getCourseId());
 
         } else {
             throw new InvalidParameterException("Invalid parameter!");
@@ -31,7 +33,7 @@ public class CourseService {
 
     public List<Course> searchCourse(UUID courseId){
 
-        Optional<Course> course = repository.findById(courseId);
+        Optional<Course> course = repository.findByCourseId(courseId);
 
         if(course.isPresent()){
             return List.of(course.get());
@@ -63,8 +65,8 @@ public class CourseService {
         }
     }
 
-    private boolean isValid(String courseName){
-         if (courseNameExists(courseName) && checkLength(courseName)){
+    private boolean isValid(CourseRequestDto requestDto){
+         if (courseNameExists(requestDto.getCourseName()) && checkLength(requestDto.getCourseName())){
              return true;
          } else{
              return false;

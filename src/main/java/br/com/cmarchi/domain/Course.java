@@ -24,7 +24,6 @@ public class Course {
     }
 
     public Course(String courseName) {
-        this.id = id;
         this.courseId = UUID.randomUUID();
         this.courseName = courseName;
         this.status = true;
